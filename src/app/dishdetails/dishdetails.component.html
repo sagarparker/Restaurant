@@ -13,7 +13,7 @@
             <h3 *ngIf="dish">{{dish.name | uppercase}}</h3>
           </mat-card-title>
         </mat-card-header>
-        <img mat-card-image src={{dish.image}} alt={{dish.name}}>
+        <img mat-card-image src="{{baseURL + dish.image}}" alt={{dish.name}}>
         <mat-card-content>
           <p>{{dish.description}}</p>
         </mat-card-content>
@@ -40,8 +40,36 @@
         <p matLine>{{ data.rating }} Stars</p>
         <p matLine>-- {{ data.author }} {{ data.date | date:'mediumDate' }}</p>
       </mat-list-item>
+      <mat-list-item *ngIf=" commentForm.status == 'VALID' ">
+        <p matLine>{{ comment }}</p>
+        <p matLine>{{ slider.value }} Stars</p>
+        <p matLine>-- {{ author }} </p>
+      </mat-list-item>
       
-     </mat-list>
+    </mat-list>
+    
+    
+    <form  [formGroup]="commentForm" #cmform="ngForm" (ngSubmit)="onSubmit()" style="margin-bottom: 20px;">
+      <p>
+        <mat-form-field>
+          <input matInput formControlName="author" placeholder="Name" type="text" [(ngModel)]="author">
+          <mat-error *ngIf="formErrors.author">{{formErrors.author}}</mat-error>
+          
+        </mat-form-field>
+      </p>
+    
+      <p>
+          <mat-slider thumbLabel min='0'  max='5' steps='5' tickInterval="1" formControlName='rating' #slider></mat-slider>   
+      </p>
+      
+      <p>
+        <mat-form-field class="full-width">
+          <textarea matInput rows="7" formControlName="comment" placeholder="Your comment" [(ngModel)]="comment"  required></textarea>
+          <mat-error *ngIf="formErrors.comment">{{formErrors.comment}}</mat-error>
+        </mat-form-field>
+      </p>
+      <button type="submit" mat-button class="background-primary text-floral-white">Submit</button>
+    </form>
 
   </div>
   <div [hidden]="dish">

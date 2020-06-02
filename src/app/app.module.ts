@@ -13,7 +13,11 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { FormsModule } from '@angular/forms'; 
 import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import {MatSliderModule} from '@angular/material/slider';
 import { ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { HttpModule} from '@angular/http';
+import { baseURL } from './shared/baseurl';
 
 
 import 'hammerjs';
@@ -39,6 +43,8 @@ import { LeaderService } from './services/leader.service';
 
 import { AppRoutingModule } from './app-routing/app-routing.module';
 import { LoginComponent } from './login/login.component';
+
+
 
 
 @NgModule({
@@ -70,8 +76,11 @@ import { LoginComponent } from './login/login.component';
     FormsModule,
     MatSelectModule,
     MatSlideToggleModule,
+    MatSliderModule,
     ReactiveFormsModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    HttpClientModule,
+    HttpModule
   ],
   entryComponents: [
     LoginComponent
@@ -79,7 +88,8 @@ import { LoginComponent } from './login/login.component';
   providers: [
     DishService,
     PromotionService,
-    LeaderService
+    LeaderService,
+    {provide: 'BaseURL', useValue: baseURL}
   ],
   bootstrap: [AppComponent]
 })
