@@ -23,6 +23,8 @@ export class DishdetailsComponent implements OnInit {
   next: string;
   commentForm: FormGroup;
   comment: Comment;
+  dishcopy: Dish;
+  errMess: String;
 
   @ViewChild('cmform') commentFormDirective;
   
@@ -39,8 +41,10 @@ export class DishdetailsComponent implements OnInit {
       this.dishService.getDish(id)
         .subscribe(dish => this.dish = dish);
       this.dishService.getDishIds().subscribe(dishIds => this.dishIds = dishIds);
-      this.route.params.pipe(switchMap((params: Params) => this.dishService.getDish(params['id'])))
-      .subscribe(dish => { this.dish = dish; this.setPrevNext(dish.id); });
+      this.route.params
+      .pipe(switchMap((params: Params) => this.dishService.getDish(params['id'])))
+      .subscribe(dish => { this.dish = dish; this.dishcopy = dish; this.setPrevNext(dish.id); },
+        errmess => this.errMess = <any>errmess );
     } 
   
 
@@ -119,8 +123,12 @@ export class DishdetailsComponent implements OnInit {
       comment: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25)] ],
       rating: ['',]
     });
-    this.dish.comments.push(this.comment);
-
+    this.dishcopy.comments.push(this.comment);
+    this.dishService.putDish(this.dishcopy)
+      .subscribe(dish => {
+        this.dish = dish; this.dishcopy = dish;
+      },
+    errmess => { this.dish = null; this.dishcopy = null; this.errMess = <any>errmess; });
     this.commentFormDirective.resetForm();
   }
 
